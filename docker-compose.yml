@@ -1,0 +1,48 @@
+version: '3.8'
+
+# Local development convenience only. For production, use a managed
+# Postgres provider (see README § Deployment) rather than this compose file.
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: church_event
+      POSTGRES_PASSWORD: church_event
+      POSTGRES_DB: church_event
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U church_event']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://church_event:church_event@postgres:5432/church_event?schema=public
+      PORT: 4000
+      NODE_ENV: development
+      CLIENT_ORIGIN: http://localhost:5173
+      JWT_ACCESS_SECRET: dev-only-access-secret-change-me
+      JWT_REFRESH_SECRET: dev-only-refresh-secret-change-me
+      STORAGE_PROVIDER: local
+      LOCAL_STORAGE_DIR: /app/uploads
+    ports:
+      - '4000:4000'
+    volumes:
+      - uploads_data:/app/uploads
+    # Run migrations + seed once, then start the server. Safe to re-run:
+    # `migrate deploy` is idempotent, and seed uses upserts where it matters.
+    command: sh -c "npx prisma migrate deploy && npm run seed && npm start"
+
+volumes:
+  postgres_data:
+  uploads_data:

@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ---- Design tokens: change these to re-skin the whole app ---- */
+  --color-brand: #FF5A5F;        /* coral — energetic primary */
+  --color-brand-light: #FF8A8E;
+  --color-brand-dark: #E23E44;
+  --color-accent: #FFC93C;       /* sunny yellow accent */
+  --color-ink: #1F1B2E;          /* near-black with a warm/purple tint */
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #FAF7F2;
+
+  --font-display: 'Baloo 2', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --radius-card: 1.25rem;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-surface-muted);
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* Reusable card look, referenced from many components. */
+.app-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: 0 1px 2px rgba(31, 27, 46, 0.06), 0 4px 16px rgba(31, 27, 46, 0.06);
+}

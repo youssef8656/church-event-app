@@ -1,0 +1,503 @@
+// ============================================================
+// Church Event Management Platform — Prisma Schema
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------
+// ENUMS
+// ------------------------------------------------------------
+
+enum GlobalRole {
+  MEMBER
+  SERVANT
+  ADMIN
+}
+
+enum TaskStatus {
+  PENDING
+  COMPLETED
+  VERIFIED
+}
+
+enum PointsSourceType {
+  ATTENDANCE
+  TASK
+  LEAGUE
+  MANUAL
+}
+
+enum MediaCategory {
+  PHOTO
+  PDF
+  PRESENTATION
+  OTHER
+}
+
+enum LeagueStatus {
+  UPCOMING
+  OPEN
+  CLOSED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum LeaderboardScope {
+  TODAY
+  CUMULATIVE
+}
+
+// ------------------------------------------------------------
+// AUTH / USERS / PERMISSIONS
+// ------------------------------------------------------------
+
+model User {
+  id                String    @id @default(uuid())
+  fullName          String
+  email             String    @unique
+  passwordHash      String
+  role              GlobalRole @default(MEMBER)
+
+  emailVerified     Boolean   @default(false)
+  emailVerifyToken  String?   @unique
+  emailVerifyExpiresAt DateTime?
+
+  qrToken           String    @unique @default(uuid()) // secure opaque identifier, NOT personal data
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // relations
+  permissions       UserPermission[]
+  attendances       Attendance[]
+  teamAssignments   TeamAssignment[]
+  roomAssignments   RoomAssignment[]
+  pointsTransactions PointsTransaction[]
+  tasksAssigned     TaskAssignment[]
+  leagueParticipations LeagueParticipant[]
+  notifications     Notification[]
+  auditLogsActed    AuditLog[] @relation("ActorUser")
+  refreshTokens     RefreshToken[]
+
+  @@index([email])
+  @@index([qrToken])
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  key         String   @unique // e.g. "attendance:scan", "league:manage:football"
+  description String?
+
+  userPermissions UserPermission[]
+}
+
+model UserPermission {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  // optional scoping, e.g. limit "league:manage" permission to a specific league
+  scopeType    String?    // "LEAGUE" | "TEAM" | null (global)
+  scopeId      String?
+
+  grantedAt    DateTime   @default(now())
+  grantedById  String?
+
+  @@unique([userId, permissionId, scopeType, scopeId])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ------------------------------------------------------------
+// EVENT / DAYS / MEETINGS / ATTENDANCE
+// ------------------------------------------------------------
+
+model Event {
+  id        String   @id @default(uuid())
+  name      String
+  startDate DateTime // date only conceptually, stored as timestamp at midnight local
+  endDate   DateTime
+  timezone  String   @default("Africa/Cairo")
+
+  eventDays EventDay[]
+  settings  EventSetting[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EventDay {
+  id        String   @id @default(uuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  dayNumber Int      // 1, 2, 3...
+  date      DateTime // calendar date this corresponds to (midnight in event timezone)
+
+  meetings         Meeting[]
+  programItems     ProgramItem[]
+  teamAssignments  TeamAssignment[]
+  teams            Team[]
+
+  @@unique([eventId, dayNumber])
+  @@unique([eventId, date])
+}
+
+model Meeting {
+  id            String   @id @default(uuid())
+  eventDayId    String
+  eventDay      EventDay @relation(fields: [eventDayId], references: [id], onDelete: Cascade)
+  title         String
+  startTime     DateTime // exact scheduled start (date+time)
+  location      String?
+
+  // attendance points config — overrides event default if set
+  graceMinutes  Int?     // e.g. 5 — null => use EventSetting default
+  attendancePoints Int?  // e.g. 10 — null => use EventSetting default
+
+  attendances   Attendance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventDayId])
+}
+
+model Attendance {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meetingId    String
+  meeting      Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  checkInAt    DateTime @default(now()) // server time, includes seconds
+  pointsAwarded Int     @default(0)
+  scannedById  String?  // servant/admin who performed the scan
+
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, meetingId]) // prevents duplicate attendance at DB level
+  @@index([meetingId])
+  @@index([userId])
+}
+
+// ------------------------------------------------------------
+// TEAMS (daily) / ROOMS
+// ------------------------------------------------------------
+
+model Team {
+  id         String   @id @default(uuid())
+  eventDayId String
+  eventDay   EventDay @relation(fields: [eventDayId], references: [id], onDelete: Cascade)
+  name       String
+  colorHex   String?
+
+  assignments TeamAssignment[]
+  pointsTransactions TeamPointsTransaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([eventDayId, name])
+}
+
+model TeamPointsTransaction {
+  id          String   @id @default(uuid())
+  teamId      String
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  amount      Int
+  reason      String?
+  grantedById String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([teamId])
+}
+
+model TeamAssignment {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventDayId String
+  eventDay   EventDay @relation(fields: [eventDayId], references: [id], onDelete: Cascade)
+  teamId     String
+  team       Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+
+  @@unique([userId, eventDayId]) // one team per user per day
+  @@index([teamId])
+}
+
+model Room {
+  id       String   @id @default(uuid())
+  label    String   @unique // e.g. "203"
+  capacity Int?
+
+  assignments RoomAssignment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoomAssignment {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+  active     Boolean  @default(true) // allows reassignment history without deleting
+
+  @@index([roomId])
+  @@index([userId])
+}
+
+// ------------------------------------------------------------
+// POINTS LEDGER
+// ------------------------------------------------------------
+
+model PointsTransaction {
+  id         String           @id @default(uuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount     Int              // can be negative
+  sourceType PointsSourceType
+  reason     String?
+
+  // optional links back to the source record
+  attendanceId String?
+  taskId        String?
+  leagueId      String?
+  grantedById   String?       // admin/servant who issued a MANUAL transaction
+
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ------------------------------------------------------------
+// TASKS
+// ------------------------------------------------------------
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  points      Int      @default(0)
+  dueAt       DateTime?
+
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assignments TaskAssignment[]
+}
+
+model TaskAssignment {
+  id       String     @id @default(uuid())
+  taskId   String
+  task     Task       @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status   TaskStatus @default(PENDING)
+
+  completedAt DateTime?
+  verifiedAt  DateTime?
+  verifiedById String?
+
+  @@unique([taskId, userId])
+  @@index([userId])
+}
+
+// ------------------------------------------------------------
+// PROGRAM
+// ------------------------------------------------------------
+
+model ProgramItem {
+  id          String   @id @default(uuid())
+  eventDayId  String
+  eventDay    EventDay @relation(fields: [eventDayId], references: [id], onDelete: Cascade)
+  time        DateTime
+  title       String
+  location    String?
+  description String?
+  sortOrder   Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventDayId])
+}
+
+// ------------------------------------------------------------
+// MEDIA
+// ------------------------------------------------------------
+
+model Media {
+  id          String        @id @default(uuid())
+  title       String
+  description String?
+  category    MediaCategory
+  fileUrl     String        // pointer into object storage, not raw bytes
+  fileKey     String        // storage-provider key, for deletion/rotation
+  mimeType    String?
+  fileSizeBytes Int?
+
+  publishedAt DateTime      @default(now())
+  isPublished Boolean       @default(true)
+
+  createdById String?
+  createdAt   DateTime      @default(now())
+}
+
+// ------------------------------------------------------------
+// LEAGUES / GAMES
+// ------------------------------------------------------------
+
+model League {
+  id               String       @id @default(uuid())
+  name             String
+  description      String?
+  location         String?
+  startAt          DateTime?
+  maxParticipants  Int?
+  status           LeagueStatus @default(UPCOMING)
+  registrationOpen Boolean      @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  participants LeagueParticipant[]
+}
+
+model LeagueParticipant {
+  id        String   @id @default(uuid())
+  leagueId  String
+  league    League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  joinedAt  DateTime @default(now())
+  result    String?  // free-text result/placement, e.g. "1st place"
+
+  @@unique([leagueId, userId]) // prevents joining twice
+  @@index([leagueId])
+}
+
+// ------------------------------------------------------------
+// ANNOUNCEMENTS
+// ------------------------------------------------------------
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  imageUrl    String?
+  priority    Int      @default(0) // higher = more important
+  isPinned    Boolean  @default(false)
+  isPublished Boolean  @default(true)
+  publishedAt DateTime @default(now())
+
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ------------------------------------------------------------
+// NOTIFICATIONS
+// ------------------------------------------------------------
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String?
+  type      String   // "ANNOUNCEMENT" | "PROGRAM" | "MEDIA" | "TASK" | ...
+  linkPath  String?  // frontend route to deep-link to
+  isRead    Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+// ------------------------------------------------------------
+// FOOD / RESTAURANTS
+// ------------------------------------------------------------
+
+model Restaurant {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  address     String?
+  phone       String?
+  mapLink     String?
+  openingHours String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menus RestaurantMenu[]
+}
+
+model RestaurantMenu {
+  id           String     @id @default(uuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  fileUrl      String
+  fileKey      String
+  mimeType     String?
+
+  uploadedAt DateTime @default(now())
+}
+
+// ------------------------------------------------------------
+// SETTINGS / AUDIT
+// ------------------------------------------------------------
+
+model EventSetting {
+  id      String @id @default(uuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  key     String // e.g. "attendance.graceMinutes", "attendance.points"
+  value   String // stored as string, parsed by app layer
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([eventId, key])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String?
+  actor      User?    @relation("ActorUser", fields: [actorId], references: [id], onDelete: SetNull)
+  action     String   // e.g. "POINTS_ADJUST", "USER_ROLE_CHANGE"
+  targetType String?  // e.g. "User", "Task"
+  targetId   String?
+  metadata   Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+  @@index([targetType, targetId])
+}
