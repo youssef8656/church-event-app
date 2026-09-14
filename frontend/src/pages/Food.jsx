@@ -12,7 +12,7 @@ export default function Food() {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-extrabold">Food Nearby</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Food Nearby</h1>
 
       {restaurants.length === 0 ? (
         <p className="text-sm text-ink/50">No restaurants added yet.</p>

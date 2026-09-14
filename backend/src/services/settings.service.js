@@ -3,6 +3,9 @@ const prisma = require('../config/prisma');
 const DEFAULTS = {
   'attendance.graceMinutes': '5',
   'attendance.points': '10',
+  // <<< NEW DEFAULTS FOR SECONDARY GRACE & POINTS >>>
+  'attendance.secondGraceMinutes': '2',   // smaller window (minutes)
+  'attendance.secondPoints': '5',         // fewer points awarded
 };
 
 async function getSetting(eventId, key) {

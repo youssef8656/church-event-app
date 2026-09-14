@@ -32,19 +32,19 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-20 bg-surface/90 backdrop-blur border-b border-black/5">
+      <header className="sticky top-0 z-20 bg-surface border-b border-black/35">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="font-display text-lg font-extrabold text-brand">Youth Event</span>
+          <span className="font-display text-lg font-extrabold text-brand">Golden Ticket</span>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1 ">
             {allNav.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.to === '/'}
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-full text-sm font-semibold transition-colors ${
-                    isActive ? 'bg-brand text-white' : 'text-ink/60 hover:bg-surface-muted'
+                  `px-3 py-2 rounded-full text-sm font-semibold transition-colors text-center ${
+                    isActive ? 'bg-brand text-white ' : 'text-ink/60 hover:bg-surface-muted hover:text-surface'
                   }`
                 }
               >
@@ -55,8 +55,8 @@ export default function AppLayout() {
               <NavLink
                 to="/admin"
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-full text-sm font-semibold transition-colors ${
-                    isActive ? 'bg-ink text-white' : 'text-ink/60 hover:bg-surface-muted'
+                  `px-3 py-2 rounded-full text-sm font-semibold transition-colors text-center ${
+                    isActive ? 'bg-brand text-white' : 'text-ink/60 hover:bg-surface-muted hover:text-surface '
                   }`
                 }
               >

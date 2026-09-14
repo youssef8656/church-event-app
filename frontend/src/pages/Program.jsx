@@ -20,8 +20,8 @@ export default function Program() {
           <button
             key={d.id}
             onClick={() => setActiveDay(i)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              i === activeDay ? 'bg-brand text-white' : 'bg-surface-muted text-ink/60'
+            className={`px-4 py-2 rounded-full text-sm font-semibold  ${
+              i === activeDay ? 'bg-brand text-white' : 'hover:bg-surface text-surface hover:text-ink '
             }`}
           >
             Day {d.dayNumber}

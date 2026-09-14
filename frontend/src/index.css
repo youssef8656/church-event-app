@@ -4,13 +4,17 @@
 
 :root {
   /* ---- Design tokens: change these to re-skin the whole app ---- */
-  --color-brand: #FF5A5F;        /* coral — energetic primary */
+  
+  --color-brand: #FFD51E;        /* coral — energetic primary */
+  --color-surface: #dddddd;
+  --color-brand-dark: #800020;
+
   --color-brand-light: #FF8A8E;
-  --color-brand-dark: #E23E44;
+  
+  
   --color-accent: #FFC93C;       /* sunny yellow accent */
   --color-ink: #1F1B2E;          /* near-black with a warm/purple tint */
-  --color-surface: #FFFFFF;
-  --color-surface-muted: #FAF7F2;
+  --color-surface-muted: #060522;
 
   --font-display: 'Baloo 2', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -41,13 +45,14 @@ h1, h2, h3, h4, .font-display {
 }
 
 
+
 /* Check in */
 
 
 /* From Uiverse.io by nazar-gavrylyk */ 
 .container {
   padding: 0;
-  margin: 0;
+  margin: auto;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;

@@ -42,10 +42,10 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface-muted px-4 flex-col">
-              <p className="text-lg font-bold text-center mb-7 text-4xl">Golden ticket</p>
-      <p className="text-lg font-bold text-center mb-4 text-3xl max-w-xl">٢١ لِذلِكَ اطْرَحُوا كُلَّ نَجَاسَةٍ وَكَثْرَةَ شَرّ، فَاقْبَلُوا بِوَدَاعَةٍ الْكَلِمَةَ الْمَغْرُوسَةَ الْقَادِرَةَ أَنْ تُخَلِّصَ نُفُوسَكُمْ. ٢٢ وَلكِنْ كُونُوا عَامِلِينَ بِالْكَلِمَةِ، لاَ سَامِعِينَ فَقَطْ خَادِعِينَ نُفُوسَكُمْ. (يعقوب ١: ٢١، ٢٢)</p>
+        <span className="font-display text-xl font-extrabold text-brand mb-7">Golden Ticket</span>
+      <p className="text-lg font-extrabold text-center mb-4 text-3xl max-w-xl text-surface">٢١ ... فَاقْبَلُوا بِوَدَاعَةٍ الْكَلِمَةَ الْمَغْرُوسَةَ الْقَادِرَةَ أَنْ تُخَلِّصَ نُفُوسَكُمْ. ٢٢ وَلكِنْ كُونُوا عَامِلِينَا فَقَطْ خَادِعِينَ نُفُوسَاكُمْ. (يعقوب ١: ٢١، ٢٢)</p>
 
-      <form onSubmit={handleSubmit} className="app-card w-full max-w-sm p-6 card">
+      <form onSubmit={handleSubmit} className="app-card w-full max-w-sm p-6 card border border-black/10 text-brand-dark">
                 <div className="inner">
         <h1 className="font-display text-2xl font-extrabold text-brand mb-1">Join the event</h1>
         <p className="text-sm text-ink/50 mb-5">Create your account to register.</p>

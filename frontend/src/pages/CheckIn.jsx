@@ -46,7 +46,7 @@ export default function CheckIn() {
         ) : (
           <>
             <p className="font-semibold mb-3">{user?.fullName}</p>
-            <img src={qrUrl} alt="Your QR code" className="mx-auto rounded-xl border border-black/5 w-64" />
+            <img src={qrUrl} alt="Your QR code" className="mx-auto rounded-xl border border-black/5 w-64 mb-3" />
             {/* <button
               onClick={handleDownload}
               className="mt-5 bg-brand text-white font-bold rounded-full px-6 py-2.5"

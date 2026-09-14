@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div className="space-y-5">
       {/* Event header */}
-      <section className="app-card p-5 bg-gradient-to-br from-brand to-brand-dark text-white">
+      <section className="app-card p-5 bg-gradient-to-br from-brand text-brand-dark">
         <p className="text-sm font-semibold opacity-90">Event Day {data.eventDay.dayNumber}</p>
         <h1 className="font-display text-2xl font-extrabold mt-0.5">{data.event.name}</h1>
         <div className="mt-4 grid grid-cols-3 gap-3 text-center">

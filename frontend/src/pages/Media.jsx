@@ -21,7 +21,7 @@ export default function Media() {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-extrabold">Media</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Media</h1>
 
       <div className="flex gap-2 overflow-x-auto pb-1">
         {CATEGORIES.map((c) => (
@@ -29,7 +29,7 @@ export default function Media() {
             key={c.label}
             onClick={() => setCategory(c.key)}
             className={`px-3 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap ${
-              category === c.key ? 'bg-brand text-white' : 'bg-surface-muted text-ink/60'
+              category === c.key ? 'bg-brand text-white' : 'text-surface hover:bg-surface hover:text-ink'
             }`}
           >
             {c.label}
@@ -38,7 +38,7 @@ export default function Media() {
       </div>
 
       {media.length === 0 ? (
-        <p className="text-sm text-ink/50">No media published in this category yet.</p>
+        <p className="text-sm text-ink/50 text-brand-dark">No media published in this category yet.</p>
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {media.map((m) => (
