@@ -50,6 +50,7 @@ export default function AdminSettings() {
           <p className="text-xs text-ink/40 mt-1">Check-ins within this many minutes of a meeting's start earn points.</p>
         </div>
 
+
         <div>
           <label className="block text-sm font-semibold mb-1">Attendance points</label>
           <input
@@ -64,6 +65,7 @@ export default function AdminSettings() {
         <button className="bg-brand text-white font-bold rounded-full px-5 py-2.5">Save Settings</button>
         {saved && <span className="ml-3 text-sm text-green-600 font-semibold">Saved ✓</span>}
       </form>
+      
     </div>
   );
 }
