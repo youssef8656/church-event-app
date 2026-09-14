@@ -47,12 +47,41 @@ export default function CheckIn() {
           <>
             <p className="font-semibold mb-3">{user?.fullName}</p>
             <img src={qrUrl} alt="Your QR code" className="mx-auto rounded-xl border border-black/5 w-64" />
-            <button
+            {/* <button
               onClick={handleDownload}
               className="mt-5 bg-brand text-white font-bold rounded-full px-6 py-2.5"
             >
               Download as PNG
-            </button>
+            </button> */}
+
+            
+            <div class="container">
+              <label class="label bg-brand text-white">
+                <input type="checkbox" class="input" onClick={handleDownload}/>
+                <span class="circle"
+                  ><svg
+                    class="icon"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M12 19V5m0 14-4-4m4 4 4-4"
+                    ></path>
+                  </svg>
+                  <div class="square"></div>
+                </span>
+                <p class="title text-black">Download</p>
+                <p class="title">Done</p>
+              </label>
+            </div>
+
+
             <p className="text-xs text-ink/40 mt-3">
               Show this to event staff — it will be scanned, not scanned by you.
             </p>

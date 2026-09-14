@@ -31,8 +31,30 @@ const eventsRoutes = require('./routes/events.routes');
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.clientOrigin, credentials: true }));
-app.use(express.json({ limit: '2mb' }));
+// Allow the configured production origin(s) plus, in development, any
+// device on the local network hitting the Vite dev server — needed to
+// test from a phone (e.g. the QR scanner) via the machine's LAN IP.
+const allowedOrigins = (env.clientOrigin || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // same-origin / curl / server-to-server
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+
+      if (env.nodeEnv !== 'production') {
+        const lanDevOrigin = /^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}):5173$/;
+        if (lanDevOrigin.test(origin)) return callback(null, true);
+      }
+
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
+    credentials: true,
+  })
+);app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
 app.use(morgan(env.nodeEnv === 'development' ? 'dev' : 'combined'));
 

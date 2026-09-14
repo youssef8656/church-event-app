@@ -25,8 +25,11 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface-muted px-4">
-      <form onSubmit={handleSubmit} className="app-card w-full max-w-sm p-6">
+    <div className="min-h-screen flex items-center justify-center bg-surface-muted px-4 flex-col">
+        <p className="text-lg font-bold text-center mb-7 text-4xl">Golden ticket</p>
+      <p className="text-lg font-bold text-center mb-4 text-3xl max-w-xl">٢١ لِذلِكَ اطْرَحُوا كُلَّ نَجَاسَةٍ وَكَثْرَةَ شَرّ، فَاقْبَلُوا بِوَدَاعَةٍ الْكَلِمَةَ الْمَغْرُوسَةَ الْقَادِرَةَ أَنْ تُخَلِّصَ نُفُوسَكُمْ. ٢٢ وَلكِنْ كُونُوا عَامِلِينَ بِالْكَلِمَةِ، لاَ سَامِعِينَ فَقَطْ خَادِعِينَ نُفُوسَكُمْ. (يعقوب ١: ٢١، ٢٢)</p>
+      <form onSubmit={handleSubmit} className="app-card w-full max-w-sm p-6 card">
+        <div className="inner">
         <h1 className="font-display text-2xl font-extrabold text-brand mb-1">Welcome back</h1>
         <p className="text-sm text-ink/50 mb-5">Log in to your event account.</p>
 
@@ -60,6 +63,7 @@ export default function Login() {
         <p className="text-sm text-ink/50 mt-4 text-center">
           No account? <Link to="/register" className="text-brand font-semibold">Register</Link>
         </p>
+        </div>
       </form>
     </div>
   );

@@ -113,24 +113,38 @@ export default function AppLayout() {
       </nav>
 
       {moreOpen && (
-        <div className="md:hidden fixed bottom-16 inset-x-0 z-20 bg-surface border-t border-black/5 grid grid-cols-4 py-2">
-          {MORE_NAV.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setMoreOpen(false)}
-              className={({ isActive }) =>
-                `flex flex-col items-center justify-center gap-0.5 py-2 text-xs font-medium ${
-                  isActive ? 'text-brand' : 'text-ink/40'
-                }`
-              }
-            >
-              <span className="text-lg leading-none">{item.icon}</span>
-              {item.label}
-            </NavLink>
-          ))}
-        </div>
-      )}
+  <div className="md:hidden fixed bottom-16 inset-x-0 z-20 bg-surface border-t border-black/5 grid grid-cols-5 py-2">
+    {MORE_NAV.map((item) => (
+      <NavLink
+        key={item.to}
+        to={item.to}
+        onClick={() => setMoreOpen(false)}
+        className={({ isActive }) =>
+          `flex flex-col items-center justify-center gap-0.5 py-2 text-xs font-medium ${
+            isActive ? 'text-brand' : 'text-ink/40'
+          }`
+        }
+      >
+        <span className="text-lg leading-none">{item.icon}</span>
+        {item.label}
+      </NavLink>
+    ))}
+    {(user?.role === 'ADMIN' || user?.role === 'SERVANT') && (
+      <NavLink
+        to="/admin"
+        onClick={() => setMoreOpen(false)}
+        className={({ isActive }) =>
+          `flex flex-col items-center justify-center gap-0.5 py-2 text-xs font-medium ${
+            isActive ? 'text-brand' : 'text-ink/40'
+          }`
+        }
+      >
+        <span className="text-lg leading-none">🛠️</span>
+        Staff
+      </NavLink>
+    )}
+  </div>
+)}
     </div>
   );
 }

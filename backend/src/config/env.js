@@ -12,6 +12,7 @@ module.exports = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT || '4000', 10),
   clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  
 
   jwt: {
     accessSecret: required('JWT_ACCESS_SECRET'),
