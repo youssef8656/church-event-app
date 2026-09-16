@@ -11,6 +11,7 @@ sameSite: env.nodeEnv === 'production' ? 'none' : 'lax',
   path: '/api/auth',
 };
 
+
 const register = asyncHandler(async (req, res) => {
   const user = await authService.register(req.body);
   res.status(201).json({ user, message: 'Registered. Check your email to verify your account.' });
