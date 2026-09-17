@@ -41,20 +41,7 @@ export default function LeaderboardPage() {
       <section className="app-card p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display text-lg font-bold">Team Ranking</h2>
-          <div className="flex text-xs rounded-full bg-surface-muted p-0.5">
-            <button
-              onClick={() => setTeamScope('TODAY')}
-              className={`px-2.5 py-1 rounded-full font-semibold text-surface ${teamScope === 'TODAY' ? 'bg-brand text-white' : 'text-ink/60'}`}
-            >
-              Today
-            </button>
-            <button
-              onClick={() => setTeamScope('CUMULATIVE')}
-              className={`px-2.5 py-1 rounded-full font-semibold text-surface ${teamScope === 'CUMULATIVE' ? 'bg-brand text-white' : 'text-ink/60'}`}
-            >
-              All Days
-            </button>
-          </div>
+
         </div>
         <ol className="space-y-2">
           {teams.map((t) => (

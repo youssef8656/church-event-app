@@ -5,16 +5,16 @@ import api from '../services/api';
 
 const PRIMARY_NAV = [
   { to: '/', label: 'Home', icon: '🏠' },
-  { to: '/check-in', label: 'Check In', icon: '📷' },
+  { to: '/profile', label: 'Profile', icon: '👤' },
+  { to: '/media', label: 'Media', icon: '🖼️' },
   { to: '/program', label: 'Program', icon: '🗓️' },
-  { to: '/leaderboard', label: 'Ranks', icon: '🏆' },
 ];
 
 const MORE_NAV = [
+  { to: '/check-in', label: 'Check In', icon: '📷' },
+  { to: '/leaderboard', label: 'Ranks', icon: '🏆' },
+  { to: '/food', label: 'الحفظ', icon: '📖' },
   { to: '/leagues', label: 'Leagues', icon: '⚽' },
-  { to: '/media', label: 'Media', icon: '🖼️' },
-  { to: '/food', label: 'Food', icon: '🍽️' },
-  { to: '/profile', label: 'Profile', icon: '👤' },
 ];
 
 export default function AppLayout() {
@@ -32,7 +32,7 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-20 bg-surface border-b border-black/35">
+      <header className="sticky top-0 z-20 bg-ink border-b border-black/35">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <span className="font-display text-lg font-extrabold text-brand">Golden Ticket</span>
 
@@ -44,7 +44,7 @@ export default function AppLayout() {
                 end={item.to === '/'}
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-full text-sm font-semibold transition-colors text-center ${
-                    isActive ? 'bg-brand text-white ' : 'text-ink/60 hover:bg-surface-muted hover:text-surface'
+                    isActive ? 'bg-brand text-white ' : 'text-surface hover:bg-surface-muted hover:text-surface'
                   }`
                 }
               >
@@ -66,14 +66,21 @@ export default function AppLayout() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {unreadCount > 0 && (
-              <span className="relative text-lg" title={`${unreadCount} unread notifications`}>
-                🔔
-                <span className="absolute -top-1 -right-1 bg-brand text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                  {unreadCount}
-                </span>
-              </span>
-            )}
+{unreadCount > 0 && (
+  <button
+    onClick={async () => {
+      await api.patch('/notifications/read-all');
+      setUnreadCount(0);
+    }}
+    className="relative text-lg"
+    title={`${unreadCount} unread notifications — tap to mark as read`}
+  >
+    🔔
+    <span className="absolute -top-1 -right-1 bg-brand text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+      {unreadCount}
+    </span>
+  </button>
+)}
             <button onClick={logout} className="text-sm text-ink/50 hover:text-ink">
               Log out
             </button>

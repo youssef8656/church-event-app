@@ -9,6 +9,7 @@ export default function Home() {
   const [data, setData] = useState(null);
   const [teamScope, setTeamScope] = useState('TODAY');
   const [error, setError] = useState(null);
+  const [versesExpanded, setVersesExpanded] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -32,8 +33,8 @@ export default function Home() {
     <div className="space-y-5">
       {/* Event header */}
       <section className="app-card p-5 bg-gradient-to-br from-brand text-brand-dark">
-        <p className="text-sm font-semibold opacity-90">Event Day {data.eventDay.dayNumber}</p>
-        <h1 className="font-display text-2xl font-extrabold mt-0.5">{data.event.name}</h1>
+        <p className="text-sm font-semibold opacity-90">Day {data.eventDay.dayNumber}</p>
+        <h1 className="font-display text-2xl font-extrabold mt-0.5 text-brand">Golden Ticket</h1>
         <div className="mt-4 grid grid-cols-3 gap-3 text-center">
           <StatPill label="Team" value={data.team?.name || '—'} />
           <StatPill label="Points" value={data.points} />
@@ -62,7 +63,7 @@ export default function Home() {
       )}
 
       {/* Announcements */}
-      <section className="app-card p-5">
+      <section className="app-card p-5" id="announcements">
         <h2 className="font-display text-xl font-bold mb-3">Today's Announcements</h2>
         {data.announcements.length === 0 ? (
           <p className="text-ink/50 text-sm">No announcements yet.</p>
@@ -87,7 +88,7 @@ export default function Home() {
           <ol className="space-y-2">
             {data.program.map((p) => (
               <li key={p.id} className="flex items-center gap-3 text-sm">
-                <span className="font-mono font-semibold text-brand w-14">
+                <span className="font-mono font-semibold text-brand-dark w-14">
                   {new Date(p.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
                 <span className="flex-1">{p.title}</span>
@@ -97,9 +98,30 @@ export default function Home() {
           </ol>
         )}
       </section>
-      <section className="app-card p-5 ">
-          <h2 className="font-display text-xl font-bold mb-3">الحفظ</h2>
-          <p className='text-ink text-center text-xl '>        ١ اَلسَّمَاوَاتُ تُحَدِّثُ بِمَجْدِ اللهِ، وَالْفَلَكُ يُخْبِرُ بِعَمَلِ يَدَيْهِ. ٢ يَوْمٌ إِلَى يَوْمٍ يُذِيعُ كَلاَمًا، وَلَيْلٌ إِلَى لَيْل يُبْدِي عِلْمًا. ٣ لاَ قَوْلَ وَلاَ كَلاَمَ. لاَ يُسْمَعُ صَوْتُهُمْ. ٤ فِي كُلِّ الأَرْضِ خَرَجَ مَنْطِقُهُمْ، وَإِلَى أَقْصَى الْمَسْكُونَةِ كَلِمَاتُهُمْ. جَعَلَ لِلشَّمْسِ مَسْكَنًا فِيهَا، ٥ وَهِيَ مِثْلُ الْعَرُوسِ الْخَارِجِ مِنْ حَجَلَتِهِ. يَبْتَهِجُ مِثْلَ الْجَبَّارِ لِلسِّبَاقِ فِي الطَّرِيقِ. ٦ مِنْ أَقْصَى السَّمَاوَاتِ خُرُوجُهَا، وَمَدَارُهَا إِلَى أَقَاصِيهَا، وَلاَ شَيْءَ يَخْتَفِي مِنْ حَرِّهَا. ٧ نَامُوسُ الرَّبِّ كَامِلٌ يَرُدُّ النَّفْسَ. شَهَادَاتُ الرَّبِّ صَادِقَةٌ تُصَيِّرُ الْجَاهِلَ حَكِيمًا. ٨ وَصَايَا الرَّبِّ مُسْتَقِيمَةٌ تُفَرِّحُ الْقَلْبَ. أَمْرُ الرَّبِّ طَاهِرٌ يُنِيرُ الْعَيْنَيْنِ. ٩ خَوْفُ الرَّبِّ نَقِيٌّ ثَابِتٌ إِلَى الأَبَدِ. أَحْكَامُ الرَّبِّ حَقٌّ عَادِلَةٌ كُلُّهَا. ١٠ أَشْهَى مِنَ الذَّهَبِ وَالإِبْرِيزِ الْكَثِيرِ، وَأَحْلَى مِنَ الْعَسَلِ وَقَطْرِ الشِّهَادِ. ١١ أَيْضًا عَبْدُكَ يُحَذَّرُ بِهَا، وَفِي حِفْظِهَا ثَوَابٌ عَظِيمٌ. ١٢ اَلسَّهَوَاتُ مَنْ يَشْعُرُ بِهَا؟ مِنَ الْخَطَايَا الْمُسْتَتِرَةِ أَبْرِئْنِي. ١٣ أَيْضًا مِنَ الْمُتَكَبِّرِينَ احْفَظْ عَبْدَكَ فَلاَ يَتَسَلَّطُوا عَلَيَّ. حِينَئِذٍ أَكُونُ كَامِلاً وَأَتَبَرَّأُ مِنْ ذَنْبٍ عَظِيمٍ. ١٤ لِتَكُنْ أَقْوَالُ فَمِي وَفِكْرُ قَلْبِي مَرْضِيَّةً أَمَامَكَ يَا رَبُّ، صَخْرَتِي وَوَلِيِّي. (المزامير ١٩)</p>
+<section className="app-card p-5">
+  <div className="flex items-center justify-between mb-3">
+    <h2 className="font-display text-xl font-bold">الحفظ 📖</h2>
+    <Link to="/food" className="text-sm font-semibold text-ink hover:text-brand-dark">
+      View Full →
+    </Link>
+  </div>
+
+  <p
+    dir="rtl"
+    className={`text-ink text-center text-xl leading-relaxed ${versesExpanded ? '' : 'line-clamp-3'}`}
+  >
+    ١ اَلسَّمَاوَاتُ تُحَدِّثُ بِمَجْدِ اللهِ، وَالْفَلَكُ يُخْبِرُ بِعَمَلِ يَدَيْهِ. ٢ يَوْمٌ إِلَى يَوْمٍ يُذِيعُ كَلاَمًا، وَلَيْلٌ إِلَى لَيْل يُبْدِي عِلْمًا. ٣ لاَ قَوْلَ وَلاَ كَلاَمَ. لاَ يُسْمَعُ صَوْتُهُمْ. ٤ فِي كُلِّ الأَرْضِ خَرَجَ مَنْطِقُهُمْ، وَإِلَى أَقْصَى الْمَسْكُونَةِ كَلِمَاتُهُمْ. جَعَلَ لِلشَّمْسِ مَسْكَنًا فِيهَا، ٥ وَهِيَ مِثْلُ الْعَرُوسِ الْخَارِجِ مِنْ حَجَلَتِهِ. يَبْتَهِجُ مِثْلَ الْجَبَّارِ لِلسِّبَاقِ فِي الطَّرِيقِ. ٦ مِنْ أَقْصَى السَّمَاوَاتِ خُرُوجُهَا، وَمَدَارُهَا إِلَى أَقَاصِيهَا، وَلاَ شَيْءَ يَخْتَفِي مِنْ حَرِّهَا. ٧ نَامُوسُ الرَّبِّ كَامِلٌ يَرُدُّ النَّفْسَ. شَهَادَاتُ الرَّبِّ صَادِقَةٌ تُصَيِّرُ الْجَاهِلَ حَكِيمًا. ٨ وَصَايَا الرَّبِّ مُسْتَقِيمَةٌ تُفَرِّحُ الْقَلْبَ. أَمْرُ الرَّبِّ طَاهِرٌ يُنِيرُ الْعَيْنَيْنِ. ٩ خَوْفُ الرَّبِّ نَقِيٌّ ثَابِتٌ إِلَى الأَبَدِ. أَحْكَامُ الرَّبِّ حَقٌّ عَادِلَةٌ كُلُّهَا. ١٠ أَشْهَى مِنَ الذَّهَبِ وَالإِبْرِيزِ الْكَثِيرِ، وَأَحْلَى مِنَ الْعَسَلِ وَقَطْرِ الشِّهَادِ. ١١ أَيْضًا عَبْدُكَ يُحَذَّرُ بِهَا، وَفِي حِفْظِهَا ثَوَابٌ عَظِيمٌ. ١٢ اَلسَّهَوَاتُ مَنْ يَشْعُرُ بِهَا؟ مِنَ الْخَطَايَا الْمُسْتَتِرَةِ أَبْرِئْنِي. ١٣ أَيْضًا مِنَ الْمُتَكَبِّرِينَ احْفَظْ عَبْدَكَ فَلاَ يَتَسَلَّطُوا عَلَيَّ. حِينَئِذٍ أَكُونُ كَامِلاً وَأَتَبَرَّأُ مِنْ ذَنْبٍ عَظِيمٍ. ١٤ لِتَكُنْ أَقْوَالُ فَمِي وَفِكْرُ قَلْبِي مَرْضِيَّةً أَمَامَكَ يَا رَبُّ، صَخْرَتِي وَوَلِيِّي. (المزامير ١٩)
+  </p>
+
+  <button
+    onClick={() => setVersesExpanded((v) => !v)}
+    className="w-full flex justify-center mt-2 text-ink hover:text-brand-dark"
+    aria-label={versesExpanded ? 'Show less' : 'Show more'}
+  >
+    <span className={`text-2xl leading-none transition-transform duration-200 ${versesExpanded ? 'rotate-180' : ''}`}>
+      ⌄
+    </span>
+  </button>
 </section>
 
       {/* Leaderboard preview (Top 5 + your rank + team ranking) */}

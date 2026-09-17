@@ -13,8 +13,9 @@ export default function Leaderboard({ top5, myRank, currentUserId, teamLeaderboa
     <div className="app-card p-5">
       <div className="flex items-center justify-between mb-3">
         <h2 className="font-display text-xl font-bold">🏆 Leaderboard</h2>
-        <Link to="/leaderboard" className="text-sm font-semibold text-brand hover:text-brand-dark">
-          View Full Leaderboard →
+        
+        <Link to="/leaderboard" className="text-sm font-semibold text-هىن hover:text-brand-dark">
+          Full Leaderboard →
         </Link>
       </div>
 
@@ -51,22 +52,7 @@ export default function Leaderboard({ top5, myRank, currentUserId, teamLeaderboa
         <div className="mt-5 pt-4 border-t border-black/10">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-display text-lg font-bold">🏆 Team Ranking</h3>
-            {onTeamScopeChange && (
-              <div className="flex text-xs rounded-full bg-surface-muted p-0.5">
-                <button
-                  onClick={() => onTeamScopeChange('TODAY')}
-                  className={`px-2.5 py-1 rounded-full font-semibold text-surface ${teamScope === 'TODAY' ? 'bg-brand text-white' : 'text-ink/60'}`}
-                >
-                  Today
-                </button>
-                <button
-                  onClick={() => onTeamScopeChange('CUMULATIVE')}
-                  className={`px-2.5 py-1 rounded-full font-semibold text-surface ${teamScope === 'CUMULATIVE' ? 'bg-brand text-white' : 'text-ink/60'}`}
-                >
-                  All Days
-                </button>
-              </div>
-            )}
+
           </div>
           <ol className="space-y-1">
             {teamLeaderboard.map((t) => (

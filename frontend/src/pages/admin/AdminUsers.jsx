@@ -69,14 +69,14 @@ export default function AdminUsers() {
             <div
               key={u.id}
               className={`w-full flex items-center justify-between py-2.5 px-1 ${
-                selected?.id === u.id ? 'bg-brand/5' : ''
+                selected?.id === u.id ? 'bg-brand' : ''
               }`}
             >
               <button onClick={() => openUser(u)} className="text-left flex-1">
                 <p className="font-medium">{u.fullName}</p>
                 <p className="text-xs text-ink/40">{u.email}</p>
               </button>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-muted mr-2">{u.role}</span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-muted text-surface mr-2">{u.role}</span>
               <button
                 onClick={() => setPendingDelete(u)}
                 className="text-red-500 text-xs font-semibold shrink-0"
