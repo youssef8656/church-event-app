@@ -28,7 +28,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-surface-muted px-4 flex-col">
         <span className="font-display text-xl font-extrabold text-brand mb-7">Golden Ticket</span>
       <p className="text-lg font-extrabold text-center mb-4 text-3xl max-w-xl text-surface">٢١ ... فَاقْبَلُوا بِوَدَاعَةٍ الْكَلِمَةَ الْمَغْرُوسَةَ الْقَادِرَةَ أَنْ تُخَلِّصَ نُفُوسَكُمْ. ٢٢ وَلكِنْ كُونُوا عَامِلِينَا فَقَطْ خَادِعِينَ نُفُوسَاكُمْ. (يعقوب ١: ٢١، ٢٢)</p>
-      <form onSubmit={handleSubmit} className="app-card w-full max-w-sm p-6 card border border-black/10 text-brand-dark">
+      <form onSubmit={handleSubmit} className="app-card w-full max-w-sm p-6 card border border-black/10 text-brand-dark ">
         <div className="inner">
         <h1 className="font-display text-2xl font-extrabold text-brand mb-1">Welcome back</h1>
         <p className="text-sm text-ink/50 mb-5">Log in to your event account.</p>

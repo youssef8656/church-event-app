@@ -34,7 +34,7 @@ export default function Home() {
       {/* Event header */}
       <section className="app-card p-5 bg-gradient-to-br from-brand text-brand-dark">
         <p className="text-sm font-semibold opacity-90">Day {data.eventDay.dayNumber}</p>
-        <h1 className="font-display text-2xl font-extrabold mt-0.5 text-brand">Golden Ticket</h1>
+        <h1 className="header font-display text-2xl font-extrabold mt-0.5 text-accent">Golden Ticket</h1>
         <div className="mt-4 grid grid-cols-3 gap-3 text-center">
           <StatPill label="Team" value={data.team?.name || '—'} />
           <StatPill label="Points" value={data.points} />

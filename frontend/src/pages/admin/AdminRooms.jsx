@@ -29,7 +29,7 @@ export default function AdminRooms() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold">Rooms</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Rooms</h1>
 
       <form onSubmit={createRoom} className="app-card p-5 flex gap-3 items-end flex-wrap">
         <div>

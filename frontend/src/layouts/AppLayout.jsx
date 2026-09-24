@@ -13,7 +13,7 @@ const PRIMARY_NAV = [
 const MORE_NAV = [
   { to: '/check-in', label: 'Check In', icon: '📷' },
   { to: '/leaderboard', label: 'Ranks', icon: '🏆' },
-  { to: '/food', label: 'الحفظ', icon: '📖' },
+  { to: '/food', label: 'Memorization Verses', icon: '📖' },
   { to: '/leagues', label: 'Leagues', icon: '⚽' },
 ];
 
@@ -33,8 +33,9 @@ export default function AppLayout() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-20 bg-ink border-b border-black/35">
-        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <span className="font-display text-lg font-extrabold text-brand">Golden Ticket</span>
+
 
           <nav className="hidden md:flex items-center gap-1 ">
             {allNav.map((item) => (
@@ -56,7 +57,7 @@ export default function AppLayout() {
                 to="/admin"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-full text-sm font-semibold transition-colors text-center ${
-                    isActive ? 'bg-brand text-white' : 'text-ink/60 hover:bg-surface-muted hover:text-surface '
+                    isActive ? 'bg-brand text-white' : 'text-surface hover:bg-surface-muted hover:text-surface '
                   }`
                 }
               >
@@ -81,7 +82,7 @@ export default function AppLayout() {
     </span>
   </button>
 )}
-            <button onClick={logout} className="text-sm text-ink/50 hover:text-ink">
+            <button onClick={logout} className="text-sm text-surface hover:text-accent">
               Log out
             </button>
           </div>

@@ -61,7 +61,7 @@ export default function AdminMeetings() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold">Meetings</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Meetings</h1>
 
       <div className="flex gap-2">
         {days.map((d) => (
@@ -69,7 +69,7 @@ export default function AdminMeetings() {
             key={d.id}
             onClick={() => setDayId(d.id)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              d.id === dayId ? 'bg-brand text-white' : 'bg-surface-muted text-ink/60'
+              d.id === dayId ? 'bg-brand text-white' : 'text-surface hover:bg-surface hover:text-ink'
             }`}
           >
             Day {d.dayNumber}

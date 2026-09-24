@@ -59,7 +59,7 @@ export default function AdminMedia() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold">Media</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Media</h1>
 
       <form onSubmit={upload} className="app-card p-5 space-y-3">
         <div>

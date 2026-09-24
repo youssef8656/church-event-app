@@ -44,7 +44,7 @@ export default function AdminAnnouncements() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold">Announcements</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Announcements</h1>
 
       <form onSubmit={create} className="app-card p-5 space-y-3">
         <div>
@@ -75,7 +75,7 @@ export default function AdminAnnouncements() {
             </button>
           </div>
         ))}
-        {announcements.length === 0 && <p className="text-sm text-ink/40">No announcements published yet.</p>}
+        {announcements.length === 0 && <p className="text-sm text-ink/40 text-brand">No announcements published yet.</p>}
       </div>
 
       <ConfirmDialog

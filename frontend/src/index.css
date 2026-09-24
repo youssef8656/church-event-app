@@ -5,14 +5,14 @@
 :root {
   /* ---- Design tokens: change these to re-skin the whole app ---- */
   
-  --color-brand: #FFD51E;        /* coral — energetic primary */
-  --color-surface: #dddddd;
+  --color-brand: #ffd500;        /* coral — energetic primary */
+  --color-surface: #dddddd ;
   --color-brand-dark: #800020;
 
   --color-brand-light: #FF8A8E;
   
   
-  --color-accent: #FFC93C;       /* sunny yellow accent */
+  --color-accent: #ffd000;       /* sunny yellow accent */
   --color-ink: #1F1B2E;          /* near-black with a warm/purple tint */
   --color-surface-muted: #060522;
 
@@ -25,6 +25,12 @@
 html, body, #root {
   height: 100%;
 }
+
+.header{
+  text-shadow: 1px 1px black;
+}
+
+
 
 body {
   font-family: var(--font-body);

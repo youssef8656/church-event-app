@@ -8,18 +8,18 @@ export default function AdminPoints() {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-extrabold">Points</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Points</h1>
 
       <div className="flex text-sm rounded-full bg-surface-muted p-0.5 w-fit">
         <button
           onClick={() => setTab('individual')}
-          className={`px-4 py-1.5 rounded-full font-semibold ${tab === 'individual' ? 'bg-brand text-white' : 'text-ink/60'}`}
+          className={`px-4 py-1.5 rounded-full font-semibold ${tab === 'individual' ? 'bg-brand text-white' : 'text-surface hover:bg-surface hover:text-ink'}`}
         >
           Individual
         </button>
         <button
           onClick={() => setTab('team')}
-          className={`px-4 py-1.5 rounded-full font-semibold ${tab === 'team' ? 'bg-brand text-white' : 'text-ink/60'}`}
+          className={`px-4 py-1.5 rounded-full font-semibold ${tab === 'team' ? 'bg-brand text-white' : 'text-surface hover:bg-surface hover:text-ink'}`}
         >
           Team
         </button>

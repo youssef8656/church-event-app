@@ -44,7 +44,7 @@ export default function AdminSettings() {
 
   return (
     <div className="space-y-5 max-w-lg">
-      <h1 className="font-display text-xl font-extrabold">Event Settings</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Event Settings</h1>
 
       <form onSubmit={save} className="app-card p-5 space-y-4">
         <p className="text-sm text-ink/50">

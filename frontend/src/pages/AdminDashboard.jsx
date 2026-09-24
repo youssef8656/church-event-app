@@ -38,8 +38,8 @@ export default function AdminDashboard() {
       </section>
 
       {stats && (
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <Stat label="Members" value={stats.totalUsers} />
+        <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 ">
+          <Stat label="Members" value={stats.totalUsers} className="text-ink"/>
           <Stat label="Check-ins Today" value={stats.attendanceToday} />
           <Stat label="Total Check-ins" value={stats.totalCheckIns} />
           <Stat label="Total Points" value={stats.totalPoints} />

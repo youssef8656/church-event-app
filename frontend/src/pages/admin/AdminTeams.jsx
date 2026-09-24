@@ -57,7 +57,7 @@ export default function AdminTeams() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold">Teams — Today</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Teams — Today</h1>
 
       <form onSubmit={createTeam} className="app-card p-5 flex gap-3 items-end flex-wrap">
         <div>

@@ -10,8 +10,8 @@ export default function AdminAuditLog() {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-extrabold">Audit Log</h1>
-      <p className="text-sm text-ink/50">
+      <h1 className="font-display text-xl font-extrabold text-brand">Audit Log</h1>
+      <p className="text-sm text-surface">
         Every sensitive action — role changes, permission grants, manual point adjustments — is recorded here.
       </p>
 
@@ -27,7 +27,7 @@ export default function AdminAuditLog() {
               {log.targetType && ` → ${log.targetType}:${log.targetId}`}
             </p>
             {log.metadata && (
-              <pre className="text-xs bg-surface-muted rounded-lg p-2 mt-2 overflow-x-auto">
+              <pre className="text-xs bg-surface-muted rounded-lg p-2 mt-2 overflow-x-auto text-surface">
                 {JSON.stringify(log.metadata, null, 2)}
               </pre>
             )}

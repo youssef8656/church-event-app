@@ -57,7 +57,7 @@ export default function AdminProgram() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold">Program</h1>
+      <h1 className="font-display text-xl font-extrabold text-brand">Program</h1>
 
       <div className="flex gap-2">
         {eventDays.map((d, i) => (
@@ -65,7 +65,7 @@ export default function AdminProgram() {
             key={d.id}
             onClick={() => setActiveDay(i)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              i === activeDay ? 'bg-brand text-white' : 'bg-surface-muted text-ink/60'
+              i === activeDay ? 'bg-brand text-ink' : ' text-surface hover:bg-surface hover:text-ink'
             }`}
           >
             Day {d.dayNumber}
