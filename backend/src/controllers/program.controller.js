@@ -11,19 +11,28 @@ const list = asyncHandler(async (req, res) => {
 });
 
 const create = asyncHandler(async (req, res) => {
-  const { eventDayId, time, title, location, description, sortOrder } = req.body;
+  const { eventDayId, time, endTime, title, location, description, sortOrder } = req.body;
   const item = await prisma.programItem.create({
-    data: { eventDayId, time: new Date(time), title, location, description, sortOrder: sortOrder ?? 0 },
+    data: {
+      eventDayId,
+      time: new Date(time),
+      endTime: endTime ? new Date(endTime) : null,
+      title,
+      location,
+      description,
+      sortOrder: sortOrder ?? 0,
+    },
   });
   res.status(201).json({ item });
 });
 
 const update = asyncHandler(async (req, res) => {
-  const { time, title, location, description, sortOrder } = req.body;
+  const { time, endTime, title, location, description, sortOrder } = req.body;
   const item = await prisma.programItem.update({
     where: { id: req.params.id },
     data: {
       ...(time !== undefined && { time: new Date(time) }),
+      ...(endTime !== undefined && { endTime: endTime ? new Date(endTime) : null }),
       ...(title !== undefined && { title }),
       ...(location !== undefined && { location }),
       ...(description !== undefined && { description }),

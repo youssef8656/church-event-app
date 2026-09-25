@@ -13,7 +13,7 @@ const PRIMARY_NAV = [
 const MORE_NAV = [
   { to: '/check-in', label: 'Check In', icon: '📷' },
   { to: '/leaderboard', label: 'Ranks', icon: '🏆' },
-  { to: '/food', label: 'Memorization Verses', icon: '📖' },
+  { to: '/food', label: 'Bible', icon: '📖' },
   { to: '/leagues', label: 'Leagues', icon: '⚽' },
 ];
 

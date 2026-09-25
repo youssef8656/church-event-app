@@ -11,6 +11,8 @@ export default function AdminTeams() {
   const [colorHex, setColorHex] = useState('#FF5A5F');
   const [eventDayId, setEventDayId] = useState(null);
   const [pendingDelete, setPendingDelete] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editingName, setEditingName] = useState('');
 
   const load = async () => {
     const [teamsRes, homeRes] = await Promise.all([api.get('/teams'), api.get('/home')]);
@@ -41,6 +43,27 @@ export default function AdminTeams() {
     load();
   };
 
+  const startEditing = (team) => {
+    setEditingId(team.id);
+    setEditingName(team.name);
+  };
+
+  const saveEditingName = async (teamId) => {
+    const trimmed = editingName.trim();
+    if (!trimmed) {
+      showToast('Team name cannot be empty', 'error');
+      return;
+    }
+    try {
+      await api.put(`/teams/${teamId}`, { name: trimmed });
+      setEditingId(null);
+      load();
+      showToast('Team renamed');
+    } catch (err) {
+      showToast(err.response?.data?.error?.message || 'Could not rename team', 'error');
+    }
+  };
+
   const confirmDeleteTeam = async () => {
     try {
       await api.delete(`/teams/${pendingDelete.id}`);
@@ -57,7 +80,7 @@ export default function AdminTeams() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold text-brand">Teams — Today</h1>
+      <h1 className="font-display text-xl font-extrabold">Teams — Today</h1>
 
       <form onSubmit={createTeam} className="app-card p-5 flex gap-3 items-end flex-wrap">
         <div>
@@ -74,14 +97,32 @@ export default function AdminTeams() {
       <div className="grid sm:grid-cols-2 gap-4">
         {teams.map((t) => (
           <div key={t.id} className="app-card p-5">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full inline-block" style={{ background: t.colorHex }} />
-                <h2 className="font-display font-bold">{t.name}</h2>
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <span className="w-3 h-3 rounded-full inline-block shrink-0" style={{ background: t.colorHex }} />
+                {editingId === t.id ? (
+                  <input
+                    autoFocus
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') saveEditingName(t.id); if (e.key === 'Escape') setEditingId(null); }}
+                    className="font-display font-bold rounded-lg border border-black/10 px-2 py-1 flex-1 min-w-0"
+                  />
+                ) : (
+                  <h2 className="font-display font-bold truncate">{t.name}</h2>
+                )}
               </div>
-              <button onClick={() => setPendingDelete(t)} className="text-red-500 text-xs font-semibold">
-                Delete
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                {editingId === t.id ? (
+                  <>
+                    <button onClick={() => saveEditingName(t.id)} className="text-brand text-xs font-semibold">Save</button>
+                    <button onClick={() => setEditingId(null)} className="text-ink/40 text-xs font-semibold">Cancel</button>
+                  </>
+                ) : (
+                  <button onClick={() => startEditing(t)} className="text-ink/40 text-xs font-semibold">Rename</button>
+                )}
+                <button onClick={() => setPendingDelete(t)} className="text-red-500 text-xs font-semibold">Delete</button>
+              </div>
             </div>
             <ul className="text-sm space-y-1 mb-3">
               {t.assignments.map((a) => (

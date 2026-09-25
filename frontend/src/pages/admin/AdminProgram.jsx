@@ -8,6 +8,7 @@ export default function AdminProgram() {
   const [eventDays, setEventDays] = useState([]);
   const [activeDay, setActiveDay] = useState(0);
   const [time, setTime] = useState('09:00');
+  const [endTime, setEndTime] = useState('10:00');
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
@@ -20,15 +21,20 @@ export default function AdminProgram() {
 
   const day = eventDays[activeDay];
 
+  const toIso = (day, hhmm) => {
+    const [h, m] = hhmm.split(':');
+    const d = new Date(day.date);
+    d.setHours(Number(h), Number(m), 0, 0);
+    return d.toISOString();
+  };
+
   const createItem = async (e) => {
     e.preventDefault();
-    const [h, m] = time.split(':');
-    const itemTime = new Date(day.date);
-    itemTime.setHours(Number(h), Number(m), 0, 0);
     try {
       await api.post('/program', {
         eventDayId: day.id,
-        time: itemTime.toISOString(),
+        time: toIso(day, time),
+        endTime: endTime ? toIso(day, endTime) : null,
         title,
         location,
         sortOrder: day.programItems.length,
@@ -57,7 +63,7 @@ export default function AdminProgram() {
 
   return (
     <div className="space-y-5">
-      <h1 className="font-display text-xl font-extrabold text-brand">Program</h1>
+      <h1 className="font-display text-xl font-extrabold">Program</h1>
 
       <div className="flex gap-2">
         {eventDays.map((d, i) => (
@@ -65,7 +71,7 @@ export default function AdminProgram() {
             key={d.id}
             onClick={() => setActiveDay(i)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              i === activeDay ? 'bg-brand text-ink' : ' text-surface hover:bg-surface hover:text-ink'
+              i === activeDay ? 'bg-brand text-white' : 'bg-surface-muted text-ink/60'
             }`}
           >
             Day {d.dayNumber}
@@ -75,8 +81,12 @@ export default function AdminProgram() {
 
       <form onSubmit={createItem} className="app-card p-5 flex gap-3 items-end flex-wrap">
         <div>
-          <label className="block text-sm font-semibold mb-1">Time</label>
+          <label className="block text-sm font-semibold mb-1">Start time</label>
           <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="rounded-xl border border-black/10 px-3 py-2" />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold mb-1">End time</label>
+          <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="rounded-xl border border-black/10 px-3 py-2" />
         </div>
         <div>
           <label className="block text-sm font-semibold mb-1">Title</label>
@@ -94,7 +104,9 @@ export default function AdminProgram() {
           <div key={item.id} className="flex items-center justify-between p-4">
             <div>
               <p className="font-semibold">
-                {new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} — {item.title}
+                {new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {item.endTime && ` – ${new Date(item.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
+                {' — '}{item.title}
               </p>
               {item.location && <p className="text-sm text-ink/50">{item.location}</p>}
             </div>

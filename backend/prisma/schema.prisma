@@ -337,6 +337,7 @@ model ProgramItem {
   eventDayId  String
   eventDay    EventDay @relation(fields: [eventDayId], references: [id], onDelete: Cascade)
   time        DateTime
+  endTime     DateTime?
   title       String
   location    String?
   description String?

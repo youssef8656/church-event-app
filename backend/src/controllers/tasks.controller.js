@@ -21,9 +21,11 @@ const list = asyncHandler(async (req, res) => {
   res.json({ tasks });
 });
 
-// POST /api/tasks (admin) — create + assign to a list of userIds
+// POST /api/tasks (admin) — create + assign to a list of userIds. Tasks
+// carry no points — completing/verifying a task is tracked for
+// accountability only and never touches the points ledger.
 const create = asyncHandler(async (req, res) => {
-  const { title, description, points, dueAt, userIds } = req.body;
+  const { title, description, dueAt, userIds } = req.body;
   if (!Array.isArray(userIds) || userIds.length === 0) {
     throw ApiError.badRequest('userIds must be a non-empty array');
   }
@@ -32,7 +34,6 @@ const create = asyncHandler(async (req, res) => {
     data: {
       title,
       description,
-      points: points ?? 0,
       dueAt: dueAt ? new Date(dueAt) : null,
       createdById: req.user.id,
       assignments: { create: userIds.map((userId) => ({ userId })) },
@@ -65,32 +66,16 @@ const markComplete = asyncHandler(async (req, res) => {
   res.json({ assignment });
 });
 
-// PATCH /api/tasks/:taskId/assignments/:userId/verify (admin verifies + awards points)
+// PATCH /api/tasks/:taskId/assignments/:userId/verify (admin verifies — no points awarded)
 const verify = asyncHandler(async (req, res) => {
   const { taskId, userId } = req.params;
 
-  const result = await prisma.$transaction(async (tx) => {
-    const assignment = await tx.taskAssignment.update({
-      where: { taskId_userId: { taskId, userId } },
-      data: { status: 'VERIFIED', verifiedAt: new Date(), verifiedById: req.user.id },
-      include: { task: true },
-    });
-
-    if (assignment.task.points > 0) {
-      await tx.pointsTransaction.create({
-        data: {
-          userId,
-          amount: assignment.task.points,
-          sourceType: 'TASK',
-          reason: `Task verified: ${assignment.task.title}`,
-          taskId,
-        },
-      });
-    }
-    return assignment;
+  const assignment = await prisma.taskAssignment.update({
+    where: { taskId_userId: { taskId, userId } },
+    data: { status: 'VERIFIED', verifiedAt: new Date(), verifiedById: req.user.id },
   });
 
-  res.json({ assignment: result });
+  res.json({ assignment });
 });
 
 module.exports = { mine, list, create, markComplete, verify };
