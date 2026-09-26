@@ -88,7 +88,7 @@ export default function Home() {
           <ol className="space-y-2">
             {data.program.map((p) => (
               <li key={p.id} className="flex items-center gap-3 text-sm">
-                <span className="font-mono font-semibold text-brand-dark w-14">
+                <span className="font-mono font-semibold text-brand-dark">
                   {new Date(p.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
                 <span className="flex-1">{p.title}</span>
