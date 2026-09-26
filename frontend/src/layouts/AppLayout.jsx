@@ -14,7 +14,6 @@ const MORE_NAV = [
   { to: '/check-in', label: 'Check In', icon: '📷' },
   { to: '/leaderboard', label: 'Ranks', icon: '🏆' },
   { to: '/food', label: 'Bible', icon: '📖' },
-  { to: '/leagues', label: 'Leagues', icon: '⚽' },
 ];
 
 export default function AppLayout() {
@@ -34,7 +33,10 @@ export default function AppLayout() {
     <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-20 bg-ink border-b border-black/35">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="font-display text-lg font-extrabold text-brand">Golden Ticket</span>
+          <span className="font-display text-lg font-extrabold text-brand flex justify-center items-center">
+            Golden Ticket
+            <img src="/imgs/Untitled-2.png" alt="Golden Ticket Logo" className="h-8 w-8 ml-2" />
+          </span>
 
 
           <nav className="hidden md:flex items-center gap-1 ">

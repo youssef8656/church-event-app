@@ -11,7 +11,6 @@ import CheckIn from './pages/CheckIn';
 import Profile from './pages/Profile';
 import Program from './pages/Program';
 import LeaderboardPage from './pages/LeaderboardPage';
-import Leagues from './pages/Leagues';
 import Media from './pages/Media';
 import Food from './pages/Food';
 import AdminDashboard from './pages/AdminDashboard';
@@ -54,7 +53,6 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/program" element={<Program />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
-          <Route path="/leagues" element={<Leagues />} />
           <Route path="/media" element={<Media />} />
           <Route path="/food" element={<Food />} />
 

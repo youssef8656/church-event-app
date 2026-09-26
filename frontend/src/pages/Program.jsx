@@ -21,7 +21,7 @@ export default function Program() {
             key={d.id}
             onClick={() => setActiveDay(i)}
             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              i === activeDay ? 'bg-brand text-white' : 'bg-surface-muted text-ink/60'
+              i === activeDay ? 'bg-brand text-surface' : 'text-surface hover:bg-surface hover:text-ink'
             }`}
           >
             Day {d.dayNumber}
@@ -39,7 +39,7 @@ export default function Program() {
           <ol className="space-y-3">
             {day.programItems.map((item) => (
               <li key={item.id} className="flex gap-3">
-                <span className="font-mono font-bold text-brand w-28 shrink-0">
+                <span className="font-mono font-bold text-brand-dark w-28 shrink-0">
                   {new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   {item.endTime && (
                     <span className="text-ink/40">
