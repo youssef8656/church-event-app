@@ -29,7 +29,7 @@ const settingsRoutes = require('./routes/settings.routes');
 const eventsRoutes = require('./routes/events.routes');
 
 const app = express();
-
+app.set('trust proxy', 1);
 app.use(helmet());
 // Allow the configured production origin(s) plus, in development, any
 // device on the local network hitting the Vite dev server — needed to
