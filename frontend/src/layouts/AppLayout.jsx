@@ -35,7 +35,7 @@ export default function AppLayout() {
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <span className="font-display text-lg font-extrabold text-brand flex justify-center items-center">
             Golden Ticket
-            <img src="/imgs/Untitled-2.png" alt="Golden Ticket Logo" className="h-8 w-8 ml-2" />
+            {/* <img src="/imgs/Untitled-2.png" alt="Golden Ticket Logo" className="h-8 w-8 ml-2" /> */}
           </span>
 
 
