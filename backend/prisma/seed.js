@@ -76,7 +76,7 @@ async function main() {
   const days = [];
   for (let i = 1; i <= 3; i++) {
     const day = await prisma.eventDay.create({
-      data: { eventId: event.id, dayNumber: i, date: new Date(`2026-10-0${i}T00:00:00`) },
+      data: { eventId: event.id, dayNumber: i, date: new Date(`2026-10-0${i}T00:00:00Z`) },
     });
     days.push(day);
   }

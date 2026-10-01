@@ -13,6 +13,36 @@ const list = asyncHandler(async (req, res) => {
 
 // POST /api/events (admin) — creates the event AND its N days in one call
 // { name, startDate, endDate, timezone, days: 3 }
+// const create = asyncHandler(async (req, res) => {
+//   const { name, startDate, endDate, timezone, days } = req.body;
+//   if (!days || days < 1) throw ApiError.badRequest('days must be at least 1');
+
+//   const start = new Date(startDate);
+//   const event = await prisma.event.create({
+//     data: {
+//       name,
+//       startDate: start,
+//       endDate: new Date(endDate),
+//       timezone: timezone || 'Africa/Cairo',
+//       settings: {
+//         create: [
+//           { key: 'attendance.graceMinutes', value: '5' },
+//           { key: 'attendance.points', value: '10' },
+//         ],
+//       },
+//       eventDays: {
+//         create: Array.from({ length: days }, (_, i) => {
+//           const date = new Date(start);
+//           date.setDate(date.getDate() + i);
+//           return { dayNumber: i + 1, date };
+//         }),
+//       },
+//     },
+//     include: { eventDays: true },
+//   });
+
+//   res.status(201).json({ event });
+// });
 const create = asyncHandler(async (req, res) => {
   const { name, startDate, endDate, timezone, days } = req.body;
   if (!days || days < 1) throw ApiError.badRequest('days must be at least 1');
@@ -32,8 +62,10 @@ const create = asyncHandler(async (req, res) => {
       },
       eventDays: {
         create: Array.from({ length: days }, (_, i) => {
-          const date = new Date(start);
-          date.setDate(date.getDate() + i);
+          // Built explicitly in UTC so the stored date's calendar day is
+          // unambiguous no matter what timezone this server process runs
+          // in — matches the same fix applied in prisma/seed.js.
+          const date = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate() + i));
           return { dayNumber: i + 1, date };
         }),
       },
